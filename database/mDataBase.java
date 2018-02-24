@@ -4,7 +4,7 @@ import java.sql.*;
 public class mDataBase {
 	private Connection connection;
 	public mDataBase() throws ClassNotFoundException,SQLException{
-		this.connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Test","root","password");
+		this.connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Test","root","jaksiemasz");
 	}
 	
 	public boolean addUser(String name, String password) throws SQLException{
@@ -20,13 +20,34 @@ public class mDataBase {
 			return false;
 	}
 	
+	public void setDone(int id) throws SQLException {
+		if(this.connection!=null) {
+			String sql="UPDATE Todos SET done=? WHERE _id=?";
+			PreparedStatement p_statement=connection.prepareStatement(sql);
+			p_statement.setBoolean(1, true);
+			p_statement.setInt(2, id);
+			p_statement.executeUpdate();
+		}
+	}
+	
+	public void setUndone(int id) throws SQLException {
+		if(this.connection!=null) {
+			String sql="UPDATE Todos SET done=? WHERE _id=?";
+			PreparedStatement p_statement=connection.prepareStatement(sql);
+			p_statement.setBoolean(1, false);
+			p_statement.setInt(2, id);
+			p_statement.executeUpdate();
+		}
+	}
+	
 	public boolean addTodo(String description, String category, int UserID) throws SQLException{
 		if(this.connection!=null) {
-			String sql="INSERT INTO Todos(description,category,UserID) VALUES(?,?,?)";
+			String sql="INSERT INTO Todos(description,category,UserID,done) VALUES(?,?,?,?)";
 			PreparedStatement p_statement=connection.prepareStatement(sql);
 			p_statement.setString(1,description);
 			p_statement.setString(2,category);
 			p_statement.setInt(3,UserID);
+			p_statement.setBoolean(4, false);
 			p_statement.executeUpdate();
 			return true;
 		}

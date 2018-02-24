@@ -25,7 +25,10 @@ public class ListTodoServlet extends HttpServlet {
 			ResultSet rs=db.getTodos(UserID);
 			todoService=new TodoService();
 			while(rs.next()) {
-				todoService.addTodo(new Todo(rs.getString("description"),rs.getString("category"),rs.getInt("_id")));
+				if(!rs.getBoolean("done"))
+					todoService.addUndoneTodo(new Todo(rs.getString("description"),rs.getString("category"),rs.getInt("_id"),rs.getBoolean("done")));
+				else
+					todoService.addDoneTodo(new Todo(rs.getString("description"),rs.getString("category"),rs.getInt("_id"),rs.getBoolean("done")));	
 		}
 		}
 		catch(SQLException e) {
@@ -42,7 +45,8 @@ public class ListTodoServlet extends HttpServlet {
 				System.out.println(e);
 			}
 		}
-		request.setAttribute("todos", todoService.retrieveTodos());
+		request.setAttribute("todos_undone", todoService.retrieveUndoneTodos());
+		request.setAttribute("todos_done", todoService.retrieveDoneTodos());
 		request.getRequestDispatcher("/WEB-INF/views/list-todos.jsp").forward(request, response);
 	}
 	

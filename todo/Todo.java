@@ -4,12 +4,14 @@ public class Todo {
 	private String name;
 	private int id;
 	private String category;
+	private boolean done;
 	
-	public Todo(String name, String category, int id) {
+	public Todo(String name, String category, int id,boolean done) {
 		super();
 		this.name = name;
 		this.id=id;
 		this.category=category;
+		this.done=done;
 	}
 	
 	public Todo(int id) {
