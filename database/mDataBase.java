@@ -4,7 +4,7 @@ import java.sql.*;
 public class mDataBase {
 	private Connection connection;
 	public mDataBase() throws ClassNotFoundException,SQLException{
-		this.connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Test","root","jaksiemasz");
+		this.connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Test","root","password");
 	}
 	
 	public boolean addUser(String name, String password) throws SQLException{
