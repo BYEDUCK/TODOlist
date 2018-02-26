@@ -9,16 +9,24 @@
 		<thead>
 			<th>Description</th>
 			<th>Category</th>
-			<th></th>
-			<th></th>
+			<th>Remind date</th>
 		</thead>
 		<tbody>
 			<c:forEach items="${todos_undone}" var="todo_ud">
 				<tr>
 					<td>${todo_ud.name}</td>
 					<td>${todo_ud.category}</td>
+					<td>${todo_ud.remindDate}</td>
 					<td><a class="btn btn-danger" href="\delete-todo.do?todo_id=${todo_ud.id}">DELETE</a></td>
 					<td><a class="btn btn-success" href="\done-todo.do?todo_id=${todo_ud.id}">DONE</a></td>
+					<c:choose>
+						<c:when test="${todo_ud.remindDate=='--'}">
+							<td><a class="btn btn-warning" href="\remind.do?todo_id=${todo_ud.id}">SET REMINDER</a></td>
+						</c:when>
+						<c:otherwise>
+							<td><a class="btn btn-warning" href="\remove_remind.do?todo_id=${todo_ud.id}">DELETE REMINDER</a></td>
+						</c:otherwise>
+					</c:choose>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -29,8 +37,6 @@
 		<thead>
 			<th>Description</th>
 			<th>Category</th>
-			<th></th>
-			<th></th>
 		</thead>
 		<tbody>
 			<c:forEach items="${todos_done}" var="todo_d">

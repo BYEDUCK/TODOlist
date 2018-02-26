@@ -23,9 +23,10 @@ public class NewUserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
+		String email=request.getParameter("email");
 		try {
 			db=new mDataBase();
-			db.addUser(name, password);
+			db.addUser(name, password,email);
 		}
 		catch(SQLException e) {
 			System.out.println(e);

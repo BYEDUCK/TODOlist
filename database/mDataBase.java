@@ -7,12 +7,31 @@ public class mDataBase {
 		this.connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Test","root","password");
 	}
 	
-	public boolean addUser(String name, String password) throws SQLException{
+	public ResultSet getTodoName(int todoID) throws SQLException {
+		if(connection!=null) {
+			Statement statement = connection.createStatement();
+			return statement.executeQuery("SELECT description FROM Todos WHERE _id="+todoID+";");
+		}
+		else
+			return null;
+	}
+	
+	public ResultSet getUserEmail(int userID) throws SQLException{
+		if(connection!=null) {
+			Statement statement = connection.createStatement();
+			return statement.executeQuery("SELECT email FROM Users WHERE _id="+userID+";");
+		}
+		else
+			return null;
+	}
+	
+	public boolean addUser(String name, String password, String email) throws SQLException{
 		if(this.connection!=null) {
-			String sql="INSERT INTO Users(name,password) VALUES(?,?)";
+			String sql="INSERT INTO Users(name,password,email) VALUES(?,?,?)";
 			PreparedStatement p_statement=connection.prepareStatement(sql);
 			p_statement.setString(1,name);
 			p_statement.setString(2,password);
+			p_statement.setString(3, email);
 			p_statement.executeUpdate();
 			return true;
 		}
@@ -25,6 +44,16 @@ public class mDataBase {
 			String sql="UPDATE Todos SET done=? WHERE _id=?";
 			PreparedStatement p_statement=connection.prepareStatement(sql);
 			p_statement.setBoolean(1, true);
+			p_statement.setInt(2, id);
+			p_statement.executeUpdate();
+		}
+	}
+	
+	public void setRemindDate(String date,int id) throws SQLException{
+		if(this.connection!=null) {
+			String sql="UPDATE Todos SET remind_date=? WHERE _id=?";
+			PreparedStatement p_statement=connection.prepareStatement(sql);
+			p_statement.setString(1, date);
 			p_statement.setInt(2, id);
 			p_statement.executeUpdate();
 		}

@@ -11,6 +11,10 @@
 			<label>Password</label>
 			<input class="form-control" name="password" type="password"/> <BR/>
 		</fieldset>
+		<fieldset class="form-group">
+			<label>E-mail</label>
+			<input class="form-control" name="email" type="email"/> <BR/>
+		</fieldset>
 		<input type="submit" value="Create" class="btn btn-success"/>
 	</form>
 </div>

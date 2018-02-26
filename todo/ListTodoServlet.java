@@ -26,9 +26,9 @@ public class ListTodoServlet extends HttpServlet {
 			todoService=new TodoService();
 			while(rs.next()) {
 				if(!rs.getBoolean("done"))
-					todoService.addUndoneTodo(new Todo(rs.getString("description"),rs.getString("category"),rs.getInt("_id"),rs.getBoolean("done")));
+					todoService.addUndoneTodo(new Todo(rs.getString("description"),rs.getString("category"),rs.getInt("_id"),rs.getBoolean("done"),rs.getString("remind_date")));
 				else
-					todoService.addDoneTodo(new Todo(rs.getString("description"),rs.getString("category"),rs.getInt("_id"),rs.getBoolean("done")));	
+					todoService.addDoneTodo(new Todo(rs.getString("description"),rs.getString("category"),rs.getInt("_id"),rs.getBoolean("done"),rs.getString("remind_date")));	
 		}
 		}
 		catch(SQLException e) {

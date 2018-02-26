@@ -5,13 +5,25 @@ public class Todo {
 	private int id;
 	private String category;
 	private boolean done;
+	private String remindDate;
 	
-	public Todo(String name, String category, int id,boolean done) {
+	public String getRemindDate() {
+		return remindDate;
+	}
+
+	public Todo(String name, String category, int id,boolean done,String remindDate) {
 		super();
 		this.name = name;
 		this.id=id;
 		this.category=category;
 		this.done=done;
+		this.remindDate=remindDate;
+		if(remindDate==null)
+			this.remindDate="--";
+	}
+	
+	public void setRemindDate(String date) {
+		this.remindDate=date;
 	}
 	
 	public Todo(int id) {
