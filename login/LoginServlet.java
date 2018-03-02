@@ -11,13 +11,13 @@ import com.mateusz.todo.TodoService;
 
 @WebServlet(urlPatterns="/login.do")
 public class LoginServlet extends HttpServlet {
-	
+
 	private LoginService userValidationService=new LoginService();
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String name=request.getParameter("name");
 		String password=request.getParameter("password");

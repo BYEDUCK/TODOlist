@@ -10,7 +10,7 @@ import javax.mail.internet.*;
 import com.mateusz.database.mDataBase;
 
 public class Reminder implements Runnable {
-	
+
 	private String dateNow;
 	private String dateRead;
 	private boolean wrong=false;
@@ -19,11 +19,11 @@ public class Reminder implements Runnable {
 	private int todoID;
 	private int userID;
 	private String todoName;
-	private final static String user="your email";
-	private final static String password="your password";
+	private final static String user="todoremindsender@gmail.com";
+	private final static String password="passwordpassword";
 	private boolean running;
 	private boolean checked=false;
-	
+
 	public Reminder(String date,int id,int userID,String todoName) {
 		this.dateRead=date;
 		this.todoID=id;
@@ -31,11 +31,11 @@ public class Reminder implements Runnable {
 		this.todoName=todoName;
 		this.running=true;
 	}
-	
+
 	public void stopRunning() {
 		this.running=false;
 	}
-	
+
 	private void sendRemind() {
 		try {
 			db=new mDataBase();
@@ -43,47 +43,47 @@ public class Reminder implements Runnable {
 			String emailto="example@example.com";
 			if(rs.next())
 				emailto=rs.getString(1);
-			String from="your email";
-			
+			String from="mateuszbajdak@gmail.com";
+			//String host="localhost";
 			// Get system properties
-		      Properties props = System.getProperties();
+			Properties props = System.getProperties();
 
-		    // Setup mail server
-		    props.put("mail.smtp.auth", "true");
-		    props.put("mail.smtp.starttls.enable", "true");
-		    props.put("mail.smtp.host", "smtp.gmail.com");
-		    props.put("mail.smtp.port", "587");
+			// Setup mail server
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.port", "587");
 
-		    // Get the default Session object.
-		    Session session = Session.getInstance(props,
-		    		new javax.mail.Authenticator() {
-		    		protected PasswordAuthentication getPasswordAuthentication() {
-		    			return new PasswordAuthentication(user, password);
-		    		}
-		    		});
+			// Get the default Session object.
+			Session session = Session.getInstance(props,
+					new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(user, password);
+				}
+			});
 
-		    try {
-		        // Create a default MimeMessage object.
-		        MimeMessage message = new MimeMessage(session);
+			try {
+				// Create a default MimeMessage object.
+				MimeMessage message = new MimeMessage(session);
 
-		        // Set From: header field of the header.
-		        message.setFrom(new InternetAddress(from));
+				// Set From: header field of the header.
+				message.setFrom(new InternetAddress(from));
 
-		        // Set To: header field of the header.
-		        message.addRecipient(Message.RecipientType.TO, new InternetAddress(emailto));
+				// Set To: header field of the header.
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(emailto));
 
-		        // Set Subject: header field
-		        message.setSubject("HEY! You've got something to do!");
+				// Set Subject: header field
+				message.setSubject("HEY! You've got something to do!");
 
-		        // Now set the actual message
-		        message.setText("You planned: "+todoName);
+				// Now set the actual message
+				message.setText("You planned: "+todoName);
 
-		        // Send message
-		        Transport.send(message);
-		        System.out.println("Sent message successfully....");
-		    } catch (MessagingException mex) {
-		        mex.printStackTrace();
-		    }
+				// Send message
+				Transport.send(message);
+				System.out.println("Sent message successfully....");
+			} catch (MessagingException mex) {
+				mex.printStackTrace();
+			}
 		}
 		catch(SQLException e) {
 			System.out.println(e);
@@ -107,8 +107,8 @@ public class Reminder implements Runnable {
 			dateNow = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(Calendar.getInstance().getTime());
 			String [] timeN=dateNow.split("-");
 			String [] timeR=dateRead.split("-");
-			
-	
+
+
 			int [] timeRead=new int[5];
 			int [] timeNow=new int[5];
 			i=0;
@@ -122,13 +122,16 @@ public class Reminder implements Runnable {
 				i++;
 			}
 			if(!checked) {
-				for(i=0;i<5;i++) {
+				for(i=0;i<3;i++) {
+
 					if(timeRead[i]<timeNow[i])
 					{
 						wrong=true;
 						break;
 					}
 				}
+				if((60*timeRead[3]+timeRead[4])<(60*timeNow[3]+timeNow[4]))
+					wrong=true;
 				if(wrong) {
 					System.out.println("Wrong data given!");
 					try {

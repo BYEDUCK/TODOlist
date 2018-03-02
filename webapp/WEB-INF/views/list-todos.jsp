@@ -1,5 +1,5 @@
-<%@ include file="../common/header.jspf" %>
-<%@ include file="../common/navigation.jspf" %>
+<%@ include file="../common/header.jspf"%>
+<%@ include file="../common/navigation.jspf"%>
 
 <div class="container">
 	<H1>Welcome ${name}</H1>
@@ -17,14 +17,19 @@
 					<td>${todo_ud.name}</td>
 					<td>${todo_ud.category}</td>
 					<td>${todo_ud.remindDate}</td>
-					<td><a class="btn btn-danger" href="\delete-todo.do?todo_id=${todo_ud.id}">DELETE</a></td>
-					<td><a class="btn btn-success" href="\done-todo.do?todo_id=${todo_ud.id}">DONE</a></td>
+					<td><a class="btn btn-danger"
+						href="\delete-todo.do?todo_id=${todo_ud.id}">DELETE</a></td>
+					<td><a class="btn btn-success"
+						href="\done-todo.do?todo_id=${todo_ud.id}">DONE</a></td>
 					<c:choose>
 						<c:when test="${todo_ud.remindDate=='--'}">
-							<td><a class="btn btn-warning" href="\remind.do?todo_id=${todo_ud.id}">SET REMINDER</a></td>
+							<td><a class="btn btn-warning"
+								href="\remind.do?todo_id=${todo_ud.id}">SET REMINDER</a></td>
 						</c:when>
 						<c:otherwise>
-							<td><a class="btn btn-warning" href="\remove_remind.do?todo_id=${todo_ud.id}">DELETE REMINDER</a></td>
+							<td><a class="btn btn-warning"
+								href="\remove_remind.do?todo_id=${todo_ud.id}">DELETE
+									REMINDER</a></td>
 						</c:otherwise>
 					</c:choose>
 				</tr>
@@ -43,8 +48,10 @@
 				<tr>
 					<td>${todo_d.name}</td>
 					<td>${todo_d.category}</td>
-					<td><a class="btn btn-danger" href="\undone-todo.do?todo_id=${todo_d.id}">UNDONE</a></td>
-					<td><a class="btn btn-success" href="\delete-todo.do?todo_id=${todo_d.id}">DELETE</a></td>
+					<td><a class="btn btn-danger"
+						href="\undone-todo.do?todo_id=${todo_d.id}">UNDONE</a></td>
+					<td><a class="btn btn-success"
+						href="\delete-todo.do?todo_id=${todo_d.id}">DELETE</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -55,4 +62,4 @@
 	<a class="btn btn-success" href="\add-todo.do">ADD</a>
 </div>
 
-<%@ include file="../common/footer.jspf" %>
+<%@ include file="../common/footer.jspf"%>
