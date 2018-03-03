@@ -35,7 +35,6 @@ public class AddReminderServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		int todoID=Integer.parseInt(request.getSession().getAttribute("todoID").toString());
-		request.getSession().removeAttribute("todoID");
 		String date = request.getParameter("date");
 		String hour = request.getParameter("hour");
 		int userID=Integer.parseInt(request.getSession().getAttribute("UserID").toString());
@@ -43,32 +42,41 @@ public class AddReminderServlet extends HttpServlet {
 		String fullDate=date+"-"+hour1;
 		String todoName="";
 		System.out.println(fullDate);
-		try {
-			db=new mDataBase();
-			db.setRemindDate(date+" "+hour, todoID);
-			ResultSet rs=db.getTodoName(todoID);
-			if(rs.next())
-				todoName=rs.getString(1);
-		}
-		catch(SQLException e) {
-			System.out.println(e+"ReminderServlet");
-		}
-		catch(ClassNotFoundException e1) {
-			System.out.println(e1);
-		}
-		finally {
+	
+		Reminder reminder=new Reminder(fullDate,todoID,userID);
+		if(reminder.isDateCorrect()) {
 			try {
-				db.closeConnection();
+				db=new mDataBase();
+				db.setRemindDate(date+" "+hour, todoID);
+				ResultSet rs=db.getTodoName(todoID);
+				if(rs.next())
+					todoName=rs.getString(1);
 			}
 			catch(SQLException e) {
-				System.out.println(e);
+				System.out.println(e+"ReminderServlet");
 			}
+			catch(ClassNotFoundException e1) {
+				System.out.println(e1);
+			}
+			finally {
+				try {
+					db.closeConnection();
+				}
+				catch(SQLException e) {
+					System.out.println(e);
+				}
+			}
+			reminder.setTodoName(todoName);
+			Thread t=new Thread(reminder);
+			t.start();
+			this.reminderService.addReminder(todoID, reminder);
+			request.getSession().setAttribute("reminders", reminderService);
+			response.sendRedirect("/list-todo.do");
 		}
-		Reminder reminder=new Reminder(fullDate,todoID,userID,todoName);
-		Thread t=new Thread(reminder);
-		t.start();
-		this.reminderService.addReminder(todoID, reminder);
-		request.getSession().setAttribute("reminders", reminderService);
-		response.sendRedirect("/list-todo.do");
+		else {
+			System.out.println("Wrong data given!");
+			request.setAttribute("errorMessage", "Wrong data given!");
+			request.getRequestDispatcher("/WEB-INF/views/reminder.jsp").forward(request, response);	
+		}
 	}
 }

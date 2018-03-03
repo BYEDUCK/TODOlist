@@ -15,7 +15,7 @@
 		<input type="hidden" name="todo_id" value="${todo_id}" /> <input
 			type="submit" value="Add" class="btn btn-success" />
 	</form>
-
+	<p><font color="red">${errorMessage}</font></p>
 </div>
 
 <%@ include file="../common/footer.jspf"%>
