@@ -13,23 +13,43 @@ public class Reminder implements Runnable {
 
 	private String dateNow;
 	private String dateRead;
-	private boolean wrong=false;
 	private int i=0;
 	private mDataBase db;
 	private int todoID;
 	private int userID;
 	private String todoName;
 	private final static String user="todoremindsender@gmail.com";
-	private final static String password="passwordpassword";
+	private final static String password="password";
 	private boolean running;
-	private boolean checked=false;
 
-	public Reminder(String date,int id,int userID,String todoName) {
+	public Reminder(String date,int id,int userID) {
 		this.dateRead=date;
 		this.todoID=id;
 		this.userID=userID;
-		this.todoName=todoName;
 		this.running=true;
+	}
+	
+	public void setTodoName(String todoName){
+		this.todoName=todoName;
+	}
+	
+	public boolean isDateCorrect() {
+		String dateNow = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(Calendar.getInstance().getTime());
+		
+		int[] timeRead = dateStringToIntArray(dateRead, "-");
+		int[] timeNow = dateStringToIntArray(dateNow, "-");
+		
+		for(i=0;i<3;i++) {
+
+			if(timeRead[i]<timeNow[i])
+				return false;
+			
+		}
+		
+		if((60*timeRead[3]+timeRead[4])<(60*timeNow[3]+timeNow[4]))
+			return false;
+		
+		return true;
 	}
 
 	public void stopRunning() {
@@ -43,8 +63,7 @@ public class Reminder implements Runnable {
 			String emailto="example@example.com";
 			if(rs.next())
 				emailto=rs.getString(1);
-			String from="mateuszbajdak@gmail.com";
-			//String host="localhost";
+			String from="todoremindsender@gmail.com";
 			// Get system properties
 			Properties props = System.getProperties();
 
@@ -74,7 +93,7 @@ public class Reminder implements Runnable {
 
 				// Set Subject: header field
 				message.setSubject("HEY! You've got something to do!");
-
+				System.out.println(todoName);
 				// Now set the actual message
 				message.setText("You planned: "+todoName);
 
@@ -100,71 +119,46 @@ public class Reminder implements Runnable {
 			}
 		}
 	}
+	
+	private int[] dateStringToIntArray(String date, String separator) {
+		int [] result = new int[5];
+		String [] sepDate=date.split(separator);
+		int i=0;
+		for(String temp:sepDate) {
+			result[i]=Integer.parseInt(temp);
+			i++;
+		}
+		return result;
+	}
+	
+	private boolean itsTheTime(int[] date1, int[] date2) {
+		
+		int len=date1.length;
+		
+		if(len!=date2.length)
+			return false;
+		
+		for(i=0;i<len;i++) {
+			if(date1[i]!=date2[i])
+				break;
+		}
+		
+		if(i==len)
+			return true;
+		else
+			return false;
+	}
 
 	@Override
 	public void run() {
 		while(running) {
 			dateNow = new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(Calendar.getInstance().getTime());
-			String [] timeN=dateNow.split("-");
-			String [] timeR=dateRead.split("-");
 
-
-			int [] timeRead=new int[5];
-			int [] timeNow=new int[5];
-			i=0;
-			for(String a:timeR) {
-				timeRead[i]=Integer.parseInt(a);
-				i++;
-			}
-			i=0;
-			for(String a:timeN) {
-				timeNow[i]=Integer.parseInt(a);
-				i++;
-			}
-			if(!checked) {
-				for(i=0;i<3;i++) {
-
-					if(timeRead[i]<timeNow[i])
-					{
-						wrong=true;
-						break;
-					}
-				}
-				if((60*timeRead[3]+timeRead[4])<(60*timeNow[3]+timeNow[4]))
-					wrong=true;
-				if(wrong) {
-					System.out.println("Wrong data given!");
-					try {
-						db=new mDataBase();
-						db.setRemindDate(null, todoID);
-					}
-					catch(SQLException e) {
-						System.out.println(e+"ReminderServlet");
-					}
-					catch(ClassNotFoundException e1) {
-						System.out.println(e1);
-					}
-					finally {
-						try {
-							db.closeConnection();
-						}
-						catch(SQLException e) {
-							System.out.println(e);
-						}
-					}
-					break;
-				}
-				else
-					checked=true;
-			}
-			System.out.println(this+" : "+"tic\n");
-			i=0;
-			while(timeRead[i]==timeNow[i]) {
-				i++;
-				if(i==5)
-					break;
-			}
-			if(i==5) {//Send e-mail
+			int [] timeRead=dateStringToIntArray(dateRead, "-");
+			int [] timeNow=dateStringToIntArray(dateNow, "-");
+			
+			
+			if(itsTheTime(timeRead, timeNow)) {//Send e-mail
 				System.out.println("din din din din!!");
 				sendRemind();
 				try {

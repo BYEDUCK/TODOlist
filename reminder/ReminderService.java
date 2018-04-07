@@ -6,11 +6,11 @@ import java.util.HashMap;
 import com.mateusz.database.mDataBase;
 
 public class ReminderService {
-	private HashMap reminders;
+	private HashMap<Integer, Reminder> reminders;
 	private mDataBase db;
 	
 	public ReminderService() {
-		this.reminders=new HashMap<Integer,Reminder>();
+		this.reminders=new HashMap<>();
 	}
 	
 	public void addReminder(int todoID,Reminder reminder) {

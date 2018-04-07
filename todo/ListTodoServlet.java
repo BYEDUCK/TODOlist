@@ -14,6 +14,10 @@ import com.mateusz.todo.TodoService;
 @WebServlet(urlPatterns="/list-todo.do")
 public class ListTodoServlet extends HttpServlet {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private TodoService todoService;
 	private int UserID;
 	private mDataBase db;

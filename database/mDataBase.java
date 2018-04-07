@@ -2,9 +2,11 @@ package com.mateusz.database;
 import java.sql.*;
 
 public class mDataBase {
+	
 	private Connection connection;
+	
 	public mDataBase() throws ClassNotFoundException,SQLException{
-		this.connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Test","root","password");
+		this.connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Test?useSSL=false","root","password");
 	}
 	
 	public ResultSet getTodoName(int todoID) throws SQLException {

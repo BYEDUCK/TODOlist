@@ -1,6 +1,5 @@
 package com.mateusz.newuser;
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -14,6 +13,10 @@ import com.mateusz.database.mDataBase;
 @WebServlet(urlPatterns="/user.new")
 public class NewUserServlet extends HttpServlet {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private mDataBase db;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

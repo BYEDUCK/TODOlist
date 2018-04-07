@@ -9,11 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mateusz.database.mDataBase;
-import com.mateusz.todo.TodoService;
 
 @WebServlet(urlPatterns="/undone-todo.do")
 public class UndoneTodoServlet extends HttpServlet {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private mDataBase db;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
